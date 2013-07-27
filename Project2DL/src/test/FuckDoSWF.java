@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import cn._2dland.lab.swf.SWFReader;
 import cn._2dland.lab.swf.SWFTag;
 import cn._2dland.lab.swf.tags.DefineBinaryTag;
-import cn._2dland.lab.tools.DoSWFDecrypt;
+import cn._2dland.lab.tools.DoSWFDecryptor;
 
 public class FuckDoSWF {
 
@@ -24,7 +24,7 @@ public class FuckDoSWF {
 				tag = reader.readTag();
 				if(tag instanceof DefineBinaryTag) {
 					DefineBinaryTag dbTag = (DefineBinaryTag) tag;
-					DoSWFDecrypt decryptor = new DoSWFDecrypt(-1, -5, -7, -3, 7);
+					DoSWFDecryptor decryptor = new DoSWFDecryptor(-1, -5, -7, -3, 7);
 					swfData = decryptor.decrypt(dbTag.getBinary());
 					break;
 				}

@@ -11,7 +11,7 @@ import cn._2dland.lab.utils.DataUtils;
  * DoSWF解密模块
  * @author deadblue
  */
-public class DoSWFDecrypt {
+public class DoSWFDecryptor {
 
 	/** 区块大小修正值 */
 	private int blockFix;
@@ -24,7 +24,7 @@ public class DoSWFDecrypt {
 	/** 加密字节跳过步数 */
 	private int step;
 
-	public DoSWFDecrypt(int blockFix, int keyFix, int skipFix, int sizeFix, int step) {
+	public DoSWFDecryptor(int blockFix, int keyFix, int skipFix, int sizeFix, int step) {
 		// 这五项数据推测是DoSWF随机生成或定制的，因此未写死在程序中
 		this.blockFix = blockFix;
 		this.keyFix = keyFix;
@@ -60,19 +60,17 @@ public class DoSWFDecrypt {
 		try {
 			// 读取第一字节，判断是否要做垃圾回收（？）
 			int garbage = iis.read();
-			// 存在该标识时，需要跳过2个整型（8字节）
+			// 存在该标识时，需要跳过一定数量的字节
 			if(garbage != 0) {
 				// 跳过一个整型（与解密无关）
 				iis.skip(4);
 				// 读取数据长度并跳过（与解密无关）
-				int tmp = DataUtils.readInt32LE(iis);
-				iis.skip(tmp);
+				int len = DataUtils.readInt32LE(iis);
+				iis.skip(len);
 			}
 			// 跳过一个无用字节（无任何用途）
 			iis.skip(1);
-			// 读取垃圾数据长度，并跳过
-			// 并非完全的垃圾数据，是一个空白的swf
-			// DoSWF还会先加载这个swf，但是似乎无任何意义
+			// 跳过一段无用数据（与解密无关）
 			int len = DataUtils.readInt32LE(iis);
 			iis.skip(len);
 			// 这里开始是目标SWF的数据，将其读出并返回
