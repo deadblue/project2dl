@@ -61,6 +61,14 @@ public class SWFReader {
 	}
 
 	/**
+	 * 获取文件头
+	 * @return
+	 */
+	public SWFHeader getHeader() {
+		return header;
+	}
+
+	/**
 	 * 读取tag
 	 * @return
 	 */
@@ -88,6 +96,17 @@ public class SWFReader {
 			e.printStackTrace();
 		}
 		return tag;
+	}
+
+	/**
+	 * 关闭读取器，释放资源
+	 */
+	public void close() {
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

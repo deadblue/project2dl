@@ -16,12 +16,12 @@ public class FuckDoSWF {
 		try {
 			// 读取swf文件
 			FileInputStream fis = new FileInputStream(srcFile);
-			SWFReader sr = new SWFReader(fis);
+			SWFReader reader = new SWFReader(fis);
 			// 遍历tag，搜寻被加密的数据块，并解密
 			byte[] swfData = null;
 			SWFTag tag = null;
 			do {
-				tag = sr.readTag();
+				tag = reader.readTag();
 				if(tag instanceof DefineBinaryTag) {
 					DefineBinaryTag dbTag = (DefineBinaryTag) tag;
 					DoSWFDecrypt decryptor = new DoSWFDecrypt(-1, -5, -7, -3, 7);
@@ -29,6 +29,7 @@ public class FuckDoSWF {
 					break;
 				}
 			} while(tag != null && tag.getCode() != 0);
+			reader.close();
 			// 若成功解密，将解密后的数据写入文件
 			if(swfData != null) {
 				FileOutputStream fos = new FileOutputStream(destFile);
